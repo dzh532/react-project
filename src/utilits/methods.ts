@@ -19,9 +19,13 @@ export const createData = async (data: BusData): Promise<BusData> => {
 };
 
 // put
-
+export const updateData = async (gos_number: string, data: BusData): Promise<BusData> => {
+    const response = await apiCleint.put<BusData>(`/api/buses/${gos_number}`, data);
+    return response.data;
+};
 
 // patch
+
 
 // delete
 
