@@ -8,6 +8,8 @@ import Welcome from './components/Welcome';
 import UserProfile from "./components/UserProfile";
 import Buses from "./components/Buses";
 import Graph from "./components/Graph";
+import Login from "./components/Login";
+import Registration from "./components/Registration";
 
 const App = () => (
   <Provider store={store}>
@@ -17,6 +19,8 @@ const App = () => (
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/bus-data" element={<Buses />} />
         <Route path="/graph" element={<Graph />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
       </Routes>
     </Router>
   </Provider>
