@@ -31,4 +31,6 @@ export const patchData = async (gos_number: string, data: Partial<BusData>): Pro
 };
 
 // delete
-
+export const deleteData = async (gos_number: string): Promise<void> => {
+    await apiCleint.delete(`/api/buses/${gos_number}`);
+};
