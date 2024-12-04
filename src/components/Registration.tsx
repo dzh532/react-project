@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import { useDispatch, UseDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { register } from "../redux/userSlice";
 
 const Registration: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        dispatch(register({ name, email }))
+        navigate('/login');
     };
 
     return (
