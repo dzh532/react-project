@@ -34,7 +34,7 @@ const Login: React.FC = () => {
                 <p>Пароль</p>
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-                <button type="submit">Зарегистрироваться</button>
+                <button type="submit">Войти</button>
             </form>
         </div>
     );
