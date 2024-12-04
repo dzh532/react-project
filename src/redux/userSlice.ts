@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { log } from "console";
-import { stat } from "fs";
 
 interface UserState {
     isAuthenticated: boolean;
@@ -12,7 +10,7 @@ const initialState: UserState = {
     isAuthenticated: false,
     userInfo: null,
     loginSuccess: false,
-}
+};
 
 const userSlice = createSlice({
     name: 'user',
@@ -33,4 +31,5 @@ const userSlice = createSlice({
     },
 });
 
+export const { register, login, logout } = userSlice.actions;
 export default userSlice.reducer;
