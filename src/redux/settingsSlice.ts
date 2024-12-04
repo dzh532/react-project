@@ -1,4 +1,4 @@
-import React, { act } from "react";
+import React from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SettingsState {
@@ -20,7 +20,7 @@ const settingsSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload;
         },
-        setError(state, action:PayloadAction<string | null>) {
+        setError(state, action: PayloadAction<string | null>) {
             state.errorMessage = action.payload;
             state.showError = action.payload !== null;
         },
@@ -31,6 +31,6 @@ const settingsSlice = createSlice({
     },
 });
 
-export const { setLoading, setError, resetError } = settingsSlice.actions
+export const { setLoading, setError, resetError } = settingsSlice.actions;
 
-export default settingsSlice;
+export default settingsSlice.reducer;
