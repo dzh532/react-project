@@ -1,11 +1,9 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
 
-const App: React.FC = () => {
-  return (
-    <div>
-      <h1>Начало</h1>
-    </div>
-  );
-};
+const App = () => (
+
+);
 
 export default App;
