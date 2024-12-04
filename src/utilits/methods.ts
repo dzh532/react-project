@@ -13,8 +13,13 @@ export const getData = async (): Promise<BusData[]> => {
 };
 
 // post
+export const createData = async (data: BusData): Promise<BusData> => {
+    const response = await apiCleint.post<BusData>('/api/buses', data);
+    return response.data;
+};
 
 // put
+
 
 // patch
 
