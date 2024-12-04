@@ -25,7 +25,10 @@ export const updateData = async (gos_number: string, data: BusData): Promise<Bus
 };
 
 // patch
-
+export const patchData = async (gos_number: string, data: Partial<BusData>): Promise<BusData> => {
+    const response = await apiCleint.patch<BusData>(`/api/buses/${gos_number}`, data);
+    return response.data;
+};
 
 // delete
 
