@@ -1,4 +1,4 @@
-import apiCleint from "./api";
+import apiClient from "./api";
 
 export interface BusData {
     gos_number: string;
@@ -8,29 +8,54 @@ export interface BusData {
 
 // get
 export const getData = async (): Promise<BusData[]> => {
-    const response = await apiCleint.get<BusData[]>('/api/buses');
-    return response.data;
+    try {
+        const response = await apiClient.get<BusData[]>('/api/buses');
+        return response.data;
+    } catch (error) {
+        console.error("Ошибка при получении данных о автобусах:", error);
+        throw error;
+    }
 };
 
 // post
 export const createData = async (data: BusData): Promise<BusData> => {
-    const response = await apiCleint.post<BusData>('/api/buses', data);
-    return response.data;
+    try {
+        const response = await apiClient.post<BusData>('/api/buses', data);
+        return response.data;
+    } catch (error) {
+        console.error("Ошибка при доавблении автобуса:", error);
+        throw error; 
+    }
 };
 
 // put
 export const updateData = async (gos_number: string, data: BusData): Promise<BusData> => {
-    const response = await apiCleint.put<BusData>(`/api/buses/${gos_number}`, data);
-    return response.data;
+    try {
+        const response = await apiClient.put<BusData>(`/api/buses/${gos_number}`, data);
+        return response.data;
+    } catch (error) {
+        console.error(`Ошибка при обновлении данных для госномера ${gos_number}:`, error);
+        throw error; 
+    }
 };
 
 // patch
 export const patchData = async (gos_number: string, data: Partial<BusData>): Promise<BusData> => {
-    const response = await apiCleint.patch<BusData>(`/api/buses/${gos_number}`, data);
-    return response.data;
+    try {
+        const response = await apiClient.patch<BusData>(`/api/buses/${gos_number}`, data);
+        return response.data;
+    } catch (error) {
+        console.error(`Ошибка при частичном обновлении данных для госномера ${gos_number}:`, error);
+        throw error; 
+    }
 };
 
 // delete
 export const deleteData = async (gos_number: string): Promise<void> => {
-    await apiCleint.delete(`/api/buses/${gos_number}`);
+    try {
+        await apiClient.delete(`/api/buses/${gos_number}`);
+    } catch (error) {
+        console.error(`Ошибка при удалении данных для госномера ${gos_number}:`, error);
+        throw error;
+    }
 };

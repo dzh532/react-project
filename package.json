@@ -1,8 +1,11 @@
 {
   "name": "react-project",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.1.10",
+    "@mui/material": "^6.1.10",
     "@reduxjs/toolkit": "^2.4.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.121",
@@ -39,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

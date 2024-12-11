@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/userSlice";
 
 const UserProfile: React.FC = () => {
-    const dispatch = useDispatch();
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAuthenticated) 
+        {
+            navigate('/login');
+        }
+    }, [!isAuthenticated, navigate]);
 
     const handleLogout = () => {
         dispatch(logout());
