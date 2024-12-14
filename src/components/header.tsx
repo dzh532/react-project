@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from "../redux/store";
+import { RootState } from "../utilits/store";
 import { Link } from 'react-router-dom';
 import { logout } from '../redux/userSlice';
 

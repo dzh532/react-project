@@ -5,7 +5,7 @@ import { register } from "../redux/userSlice";
 import { TextField, Button, Box } from "@mui/material";
 import ResponsiveAppBar from "./header"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { RootState } from "../redux/store";
+import { RootState } from "../utilits/store";
 
 const theme = createTheme({
     typography: {

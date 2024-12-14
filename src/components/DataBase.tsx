@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { getData, createData, updateData, deleteData, BusData } from '../utilits/methods'; // Импортируйте ваши функции
-import { TextField, Button, Box, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { getData, createData, updateData, deleteData, BusData } from '../utilits/methods';
+import { TextField, Button, Box, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress } from '@mui/material';
+import { setLoading, setError } from '../redux/settingsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setBuses, addBus, updateBus, deleteBus } from '../redux/busesSlice';
+import { RootState } from '../utilits/store';
 
 const DataBase: React.FC = () => {
-    const [buses, setBuses] = useState<BusData[]>([]);
+    const dispatch = useDispatch();
+    const buses = useSelector((state: RootState) => state.buses.buses);
+    // добавить получение состояния загрузки
+    // const [buses, setBuses] = useState<BusData[]>([]);
     const [gosNumber, setGosNumber] = useState('');
     const [capacity, setCapacity] = useState(0);
     const [isAirConditioner, setIsAirConditioner] = useState(false);
     const [editingBus, setEditingBus] = useState<BusData | null>(null);
+    const [loading, set_Loading] = useState(false);
 
     // Получение данных о автобусах
     const fetchBuses = async () => {
+        dispatch(setLoading(true));
         try {
             const data = await getData();
-            setBuses(data);
+            dispatch(setBuses(data));
         } catch (error) {
-            // console.error("Ошибка при получении данных о автобусах:", error);
-            alert("Ошибка при получении данных о автобусах:");
+            dispatch(setError("Ошибка при получении данных о автобусах."));
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 
@@ -29,6 +39,7 @@ const DataBase: React.FC = () => {
         try {
             const newBus: BusData = { gos_number: gosNumber, capacity: capacity, is_air_conditioner: isAirConditioner };
             await createData(newBus);
+            dispatch(addBus(newBus));
             fetchBuses(); // Обновляем список автобусов
             clearForm(); // Очищаем форму
         } catch (error) {
@@ -42,6 +53,7 @@ const DataBase: React.FC = () => {
             try {
                 const updatedBus: BusData = { gos_number: editingBus.gos_number, capacity: capacity, is_air_conditioner: isAirConditioner };
                 await updateData(editingBus.gos_number, updatedBus);
+                dispatch(updateBus(updatedBus));
                 fetchBuses(); // Обновляем список автобусов
                 clearForm(); // Очищаем форму
                 setEditingBus(null); // Сбрасываем режим редактирования
@@ -55,6 +67,7 @@ const DataBase: React.FC = () => {
     const handleDeleteBus = async (gos_number: string) => {
         try {
             await deleteData(gos_number);
+            dispatch(deleteBus(gos_number));
             fetchBuses(); // Обновляем список автобусов
         } catch (error) {
             console.error("Ошибка при удалении автобуса:", error);
@@ -70,71 +83,75 @@ const DataBase: React.FC = () => {
 
     return (
         <Box sx={{ padding: 2 }}>
-            <h1>Управление автобусами</h1>
+            <h1>Таблица автобусы</h1>
+            {loading ? <CircularProgress />
+            : (
+            <>
+                <Box sx={{ marginBottom: 2 }}>
+                    <TextField 
+                        label="Госномер" 
+                        value={gosNumber} 
+                        onChange={(e) => setGosNumber(e.target.value)} 
+                        required 
+                    />
+                    <TextField 
+                        label="Вместимость" 
+                        type="number" 
+                        value={capacity} 
+                        onChange={(e) => setCapacity(Number(e.target.value))} 
+                        required 
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isAirConditioner}
+                                onChange={(e) => setIsAirConditioner(e.target.checked)} 
+                                color="primary"
+                            />
+                        }
+                        label="Кондиционер"
+                    />
+                    <Button onClick={editingBus ? handleUpdateBus : handleCreateBus}>
+                        {editingBus ? 'Обновить' : 'Добавить'}
+                    </Button>
+                </Box>
 
-            <Box sx={{ marginBottom: 2 }}>
-                <TextField 
-                    label="Госномер" 
-                    value={gosNumber} 
-                    onChange={(e) => setGosNumber(e.target.value)} 
-                    required 
-                />
-                <TextField 
-                    label="Вместимость" 
-                    type="number" 
-                    value={capacity} 
-                    onChange={(e) => setCapacity(Number(e.target.value))} 
-                    required 
-                />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={isAirConditioner}
-                            onChange={(e) => setIsAirConditioner(e.target.checked)} 
-                            color="primary"
-                        />
-                    }
-                    label="Кондиционер"
-                />
-                <Button onClick={editingBus ? handleUpdateBus : handleCreateBus}>
-                    {editingBus ? 'Обновить' : 'Добавить'}
-                </Button>
-            </Box>
-
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Госномер</TableCell>
-                            <TableCell>Вместимость</TableCell>
-                            <TableCell>Кондиционер</TableCell>
-                            <TableCell>Действия</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {buses.map((bus) => (
-                            <TableRow key={bus.gos_number}>
-                                <TableCell>{bus.gos_number}</TableCell>
-                                <TableCell>{bus.capacity}</TableCell>
-                                <TableCell>{bus.is_air_conditioner ? 'Да' : 'Нет'}</TableCell>
-                                <TableCell>
-                                    <Button onClick={() => { 
-                                        setEditingBus(bus); 
-                                        setGosNumber(bus.gos_number); 
-                                        setCapacity(bus.capacity); 
-                                        setIsAirConditioner(bus.is_air_conditioner); 
-                                    }}>
-                                        Редактировать
-                                    </Button>
-                                    <Button onClick={() => handleDeleteBus(bus.gos_number)}>
-                                        Удалить
-                                    </Button>
-                                </TableCell>
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Госномер</TableCell>
+                                <TableCell>Вместимость</TableCell>
+                                <TableCell>Кондиционер</TableCell>
+                                <TableCell>Действия</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {buses.map((bus) => (
+                                <TableRow key={bus.gos_number}>
+                                    <TableCell>{bus.gos_number}</TableCell>
+                                    <TableCell>{bus.capacity}</TableCell>
+                                    <TableCell>{bus.is_air_conditioner ? 'Да' : 'Нет'}</TableCell>
+                                    <TableCell>
+                                        <Button onClick={() => { 
+                                            setEditingBus(bus); 
+                                            setGosNumber(bus.gos_number); 
+                                            setCapacity(bus.capacity); 
+                                            setIsAirConditioner(bus.is_air_conditioner); 
+                                        }}>
+                                            Редактировать
+                                        </Button>
+                                        <Button onClick={() => handleDeleteBus(bus.gos_number)}>
+                                            Удалить
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </> 
+            )}
         </Box>
     );
 };

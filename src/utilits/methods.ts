@@ -1,11 +1,13 @@
 import apiClient from "./api";
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../redux/settingsSlice';
 
 export interface BusData {
     gos_number: string;
     capacity: number;
     is_air_conditioner: boolean;
 }
-
+ 
 // get
 export const getData = async (): Promise<BusData[]> => {
     try {
