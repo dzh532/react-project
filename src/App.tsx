@@ -13,6 +13,7 @@ import Registration from "./components/Registration";
 
 import ErrorModal from './components/ErrorModal';
 import Loading from "./components/Loading";
+import Auth from "./components/Auth";
 
 const InnerApp = () => {
   const { isLoading } = useSelector((state: RootState) => state.settings);
@@ -22,15 +23,17 @@ const InnerApp = () => {
       <ErrorModal />
       <Loading isLoading={isLoading} />
       <Router>
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/user-profile" element={<UserProfile />} />
-          <Route path="/data-base" element={<DataBase />} />
-          <Route path="/graph" element={<Graph />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registration" element={<Registration />} />
-          <Route path="*" element={<div>Нет страницы</div>} />
-        </Routes>
+        <Auth>
+          <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/data-base" element={<DataBase />} />
+            <Route path="/graph" element={<Graph />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="*" element={<div>Нет страницы</div>} />
+          </Routes>
+        </Auth>
       </Router>
     </>
   );
@@ -39,10 +42,14 @@ const InnerApp = () => {
 const App = () => (
   <Provider store={store}>
     <InnerApp />
-  </Provider>
+  </Provider> 
 );
 
 export default App;
+
+
+
+
 
 
 

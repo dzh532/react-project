@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../utilits/store";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../redux/userSlice';
 
 const leftPages = [
@@ -34,13 +34,22 @@ const settings = [
 
 function ResponsiveAppBar() {
   const isAuth = useSelector((state: RootState) => state.user.isAuthenticated);
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  
 
   const handleLogout = () => {
     handleCloseUserMenu();
+    localStorage.removeItem("access_token");
     dispatch(logout());
+    navigate('/');
+  };
+
+  const handleProfile = () => {
+    navigate('/user-profile');
   };
 
 
@@ -140,7 +149,7 @@ function ResponsiveAppBar() {
             SGU
           </Typography>
 
-          {/* Левая часть с графами */}
+          {/* Левая часть с бд */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {leftPages.map((page) => (
               <Button
@@ -194,7 +203,7 @@ function ResponsiveAppBar() {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting.name} onClick={handleLogout}>
+                    <MenuItem key={setting.name} onClick={setting.name == 'Профиль' ? handleProfile : handleLogout}>
                       <Link to={setting.path} style={{ textDecoration: 'none', color:'inherit'}}></Link>
                       <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
                     </MenuItem>

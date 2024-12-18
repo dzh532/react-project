@@ -8,6 +8,8 @@ import AlertDialog from './AlertDialog';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from "../redux/userSlice";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { setLoading } from '../redux/settingsSlice';
+import { loginData, UserDataLogin } from "../utilits/methods_auth";
 
 const theme = createTheme({
     typography: {
@@ -16,11 +18,11 @@ const theme = createTheme({
   });
   
 const Login: React.FC = () => {
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [alertOpen, setAlertOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const userInfo = useSelector((state: RootState) => state.user.userInfo);
+    const userInfo = useSelector((state: RootState) => state.user.user);
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -28,21 +30,23 @@ const Login: React.FC = () => {
     useEffect(() => {
         if (isAuthenticated) 
         {
-            navigate('/');
+            navigate('/user-profile');
         }
     }, [isAuthenticated, navigate]);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        if (userInfo && email === userInfo.email && password === userInfo.password)
-        {
-            dispatch(login({ email, password }));   
+        try {
+            dispatch(setLoading(true));
+            const loginUser: UserDataLogin = { username: name, password: password };
+            await loginData(loginUser);
+            dispatch(login({ name, password }));   
             navigate('/user-profile');
-        } 
-        else
-        {
+        } catch (error) {
+            console.error('Ошибка при авторизации:', error);
             setAlertOpen(true);
+        } finally {
+            dispatch(setLoading(false)); // Завершаем загрузку
         }
     };
 
@@ -73,12 +77,13 @@ const Login: React.FC = () => {
 
                 <Box mb={2}>
                     <TextField 
-                        id="outlined-basic" 
-                        label="Почта" 
+                        // id="outlined-basic" 
+                        id="outlined-basic-name" 
+                        label="Имя" 
                         variant="outlined" 
-                        type="email" 
+                        // type="email" 
                         fullWidth 
-                        onChange={(e) => setEmail(e.target.value)} 
+                        onChange={(e) => setName(e.target.value)} 
                         required
                     />
                 </Box>

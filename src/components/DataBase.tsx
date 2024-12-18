@@ -5,12 +5,13 @@ import { setLoading, setError } from '../redux/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBuses, addBus, updateBus, deleteBus } from '../redux/busesSlice';
 import { RootState } from '../utilits/store';
+import { useNavigate } from 'react-router-dom';
 
 const DataBase: React.FC = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const buses = useSelector((state: RootState) => state.buses.buses);
-    // добавить получение состояния загрузки
-    // const [buses, setBuses] = useState<BusData[]>([]);
+    const { showError } = useSelector((state: RootState) => state.settings);
     const [gosNumber, setGosNumber] = useState('');
     const [capacity, setCapacity] = useState(0);
     const [isAirConditioner, setIsAirConditioner] = useState(false);
@@ -31,19 +32,22 @@ const DataBase: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchBuses(); // Получаем данные при монтировании компонента
+        fetchBuses(); 
     }, []);
 
     // Создание нового автобуса
     const handleCreateBus = async () => {
         try {
             const newBus: BusData = { gos_number: gosNumber, capacity: capacity, is_air_conditioner: isAirConditioner };
+            dispatch(setLoading(true));
             await createData(newBus);
             dispatch(addBus(newBus));
             fetchBuses(); // Обновляем список автобусов
             clearForm(); // Очищаем форму
         } catch (error) {
             console.error("Ошибка при добавлении автобуса:", error);
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 
@@ -52,6 +56,7 @@ const DataBase: React.FC = () => {
         if (editingBus) {
             try {
                 const updatedBus: BusData = { gos_number: editingBus.gos_number, capacity: capacity, is_air_conditioner: isAirConditioner };
+                dispatch(setLoading(true));
                 await updateData(editingBus.gos_number, updatedBus);
                 dispatch(updateBus(updatedBus));
                 fetchBuses(); // Обновляем список автобусов
@@ -59,6 +64,8 @@ const DataBase: React.FC = () => {
                 setEditingBus(null); // Сбрасываем режим редактирования
             } catch (error) {
                 console.error("Ошибка при обновлении автобуса:", error);
+            } finally {
+                dispatch(setLoading(false));
             }
         }
     };
@@ -66,11 +73,14 @@ const DataBase: React.FC = () => {
     // Удаление автобуса
     const handleDeleteBus = async (gos_number: string) => {
         try {
+            dispatch(setLoading(true));
             await deleteData(gos_number);
             dispatch(deleteBus(gos_number));
             fetchBuses(); // Обновляем список автобусов
         } catch (error) {
             console.error("Ошибка при удалении автобуса:", error);
+        } finally {
+            dispatch(setLoading(false));
         }
     };
 

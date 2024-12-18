@@ -6,6 +6,8 @@ import { TextField, Button, Box } from "@mui/material";
 import ResponsiveAppBar from "./header"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { RootState } from "../utilits/store";
+import { getData, createData, UserData } from "../utilits/methods_auth";
+import { setLoading } from "../redux/settingsSlice";
 
 const theme = createTheme({
     typography: {
@@ -17,21 +19,31 @@ const Registration: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     useEffect(() => {
-        if (isAuthenticated) 
+        if (isAuthenticated)
         {
             navigate('/');
         }
     }, [isAuthenticated, navigate]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const newUser: UserData = { username: name, email: email, password: password };
         dispatch(register({ name, email, password }));
-        navigate('/login');
+        try {
+            dispatch(setLoading(true));
+            await createData(newUser);
+            navigate('/login');
+        } catch (error) {
+            
+        } finally {
+            dispatch(setLoading(false));
+        }   
     };
 
     return (

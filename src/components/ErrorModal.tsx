@@ -7,12 +7,10 @@ import { useNavigate } from 'react-router-dom';
 
 const ErrorModal: React.FC = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { showError, errorMessage } = useSelector((state: RootState) => state.settings);
 
     const handleClose = () => {
         dispatch(resetError());
-        navigate('/');
     };
 
     return (
