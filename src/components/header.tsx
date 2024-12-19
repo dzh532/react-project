@@ -19,7 +19,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../redux/userSlice';
 
 const leftPages = [
-  { name: 'БД', path: '/data-base' },
+  { name: 'Автобусы', path: '/data-base' },
+  { name: 'Компании', path: '/data-base-driver' },
+  { name: 'Автобусы в компаниях', path: '/bus-in-com' },
 ];
 
 const rightPages = [

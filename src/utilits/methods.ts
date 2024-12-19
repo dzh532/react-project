@@ -1,6 +1,4 @@
 import apiClient from "./api";
-import { useDispatch } from 'react-redux';
-import { setLoading } from '../redux/settingsSlice';
 
 export interface BusData {
     gos_number: string;
@@ -15,6 +13,17 @@ export const getData = async (): Promise<BusData[]> => {
         return response.data;
     } catch (error) {
         console.error("Ошибка при получении данных о автобусах:", error);
+        throw error;
+    }
+};
+
+// GET: Получение отчета по автобусам с кондиционерами
+export const getBusesWithAirConditioner = async (): Promise<BusData[]> => {
+    try {
+        const response = await apiClient.get<BusData[]>('/api/buses/buses/with_air_conditioner');
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении отчета о автобусах с кондиционерами:', error);
         throw error;
     }
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import ResponsiveAppBar from "./header"
-
+import BusSearchForm from "./BusSeacrhForm";
 
 const Welcome: React.FC = () => {
     return (
@@ -18,6 +18,7 @@ const Welcome: React.FC = () => {
             </div>
 
             <h1 style={{ textAlign: 'center' }}>Добро пожаловать!</h1>
+            < BusSearchForm />
 
         </div>
     );

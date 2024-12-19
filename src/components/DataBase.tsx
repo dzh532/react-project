@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setBuses, addBus, updateBus, deleteBus } from '../redux/busesSlice';
 import { RootState } from '../utilits/store';
 import { useNavigate } from 'react-router-dom';
+import BusReport from './BusReport';
+
 
 const DataBase: React.FC = () => {
     const dispatch = useDispatch();
@@ -94,8 +96,7 @@ const DataBase: React.FC = () => {
     return (
         <Box sx={{ padding: 2 }}>
             <h1>Таблица автобусы</h1>
-            {loading ? <CircularProgress />
-            : (
+            < BusReport />
             <>
                 <Box sx={{ marginBottom: 2 }}>
                     <TextField 
@@ -161,7 +162,6 @@ const DataBase: React.FC = () => {
                     </Table>
                 </TableContainer>
             </> 
-            )}
         </Box>
     );
 };
