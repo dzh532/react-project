@@ -25,7 +25,7 @@ const Auth: React.FC<AuthProviderProps> = ({ children }) => {
 
             if (!token) 
             {
-                if (["/user-profile", "/data-base", "/data-base-company"].includes(location.pathname))
+                if (["/user-profile", "/data-base", "/data-base-company", "/bus-in-com"].includes(location.pathname))
                     navigate("/login");
 
                 dispatch(logout());

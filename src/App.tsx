@@ -30,7 +30,7 @@ const InnerApp = () => {
             <Route path="/" element={<Welcome />} />
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/data-base" element={<DataBase />} />
-            <Route path="/data-base-driver" element={<DataBaseCompany />} />
+            <Route path="/data-base-company" element={<DataBaseCompany />} />
             <Route path="/bus-in-com" element={<BusInCompanyPage />} />
             <Route path="/graph" element={<Graph />} />
             <Route path="/login" element={<Login />} />

@@ -18,11 +18,11 @@ import { RootState } from "../utilits/store";
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../redux/userSlice';
 
-const leftPages = [
-  { name: 'Автобусы', path: '/data-base' },
-  { name: 'Компании', path: '/data-base-driver' },
-  { name: 'Автобусы в компаниях', path: '/bus-in-com' },
-];
+// const leftPages = [
+//   { name: 'Автобусы', path: '/data-base' },
+//   { name: 'Компании', path: '/data-base-company' },
+//   { name: 'Автобусы в компаниях', path: '/bus-in-com' },
+// ];
 
 const rightPages = [
   { name: 'Авторизация', path: '/login' },
@@ -40,8 +40,17 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAdm = useSelector((state: RootState) => state.user.isAdmin);
 
-  
+  const leftPages = isAdm 
+    ? [
+        { name: 'Автобусы', path: '/data-base' },
+        { name: 'Компании', path: '/data-base-company' },
+        { name: 'Автобусы в компаниях', path: '/bus-in-com' },
+      ] 
+    : [
+        { name: 'Автобусы в компаниях', path: '/bus-in-com' },
+      ];
 
   const handleLogout = () => {
     handleCloseUserMenu();
@@ -91,7 +100,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            SGU
+            Главная
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -148,7 +157,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            SGU
+            Главная
           </Typography>
 
           {/* Левая часть с бд */}
@@ -205,7 +214,7 @@ function ResponsiveAppBar() {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting.name} onClick={setting.name == 'Профиль' ? handleProfile : handleLogout}>
+                    <MenuItem key={setting.name} onClick={setting.name === 'Профиль' ? handleProfile : handleLogout}>
                       <Link to={setting.path} style={{ textDecoration: 'none', color:'inherit'}}></Link>
                       <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
                     </MenuItem>

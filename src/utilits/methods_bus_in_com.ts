@@ -42,3 +42,13 @@ export const addBusToCompany = async (gosNumber: string, companyName: string): P
         throw error;
     }
 };
+
+// delete
+export const deleteData = async (gos_number: string): Promise<void> => {
+    try {
+        await apiClient.delete(`/api/buses_in_company/${gos_number}`);
+    } catch (error) {
+        console.error(`Ошибка при удалении данных для госномера ${gos_number}:`, error);
+        throw error;
+    }
+};

@@ -17,10 +17,10 @@ const BusSearchForm = () => {
     const [companyName_result, setCompanyName_result] = useState("");
 
     const handleSearch = async () => {
-        if (!isAuth)
-        {
-            return alert("Необходимо авторизоваться!");            
-        }
+        // if (!isAuth)
+        // {
+            // return alert("Необходимо авторизоваться!");            
+        // }
         if (!companyName || !minCapacity || !maxCapacity)
         {
             return alert("Заполнены не все поля!");
