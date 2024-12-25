@@ -5,7 +5,6 @@ import { setLoading, setError } from '../redux/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBuses, addBus, updateBus, deleteBus } from '../redux/busesSlice';
 import { RootState } from '../utilits/store';
-import { useNavigate } from 'react-router-dom';
 import BusReport from './BusReport';
 import BusSearch from './BusSeacrh';
 import ResponsiveAppBar from './header';
@@ -165,7 +164,7 @@ const DataBase: React.FC = () => {
                 <Modal open={open} onClose={handleClose}>
                     <Box sx={style}>
                         <h1>Автобусы, у которых установлен кондиционер</h1>
-                        <Button variant="contained" onClick={handleClose} sx={{ marginTop: 2 }}>
+                        <Button variant="contained" onClick={handleClose} sx={{ marginTop: 2, float: 'right' }}>
                             Закрыть
                         </Button>
                         <BusReport />

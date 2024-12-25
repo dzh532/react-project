@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { getCompanies, createCompany, updateCompany, deleteCompany, CompanyData } from '../utilits/methods_company';
 import { getBusesByCompany } from '../utilits/methods_bus_in_com'; // API-запрос для автобусов в компании
-import { TextField, Button, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Dialog, DialogTitle, DialogContent, Typography } from '@mui/material';
+import { TextField, Button, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Dialog, DialogTitle, DialogContent, Typography, Modal } from '@mui/material';
 import { setLoading, setError } from '../redux/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompanies, addCompany, updateCompany as updateCompanyAction, deleteCompany as deleteCompanyAction } from '../redux/companiesSlice';
 import { RootState } from '../utilits/store';
 import ResponsiveAppBar from './header';
 import CompanySearch from './CompanySeacrh';
+import CompanyReport from './CompanyReport';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%', 
+    height: '90%',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    overflowY: 'auto',
+  };
+
 
 interface Bus {
   buses_gos_number: string;
@@ -21,9 +36,12 @@ const DataBaseCompany: React.FC = () => {
     const [address, setAddress] = useState('');
     const [numberPhone, setNumberPhone] = useState('');
     const [editingCompany, setEditingCompany] = useState<CompanyData | null>(null);
-    const company = useSelector((state: RootState) => state.companies.companies);
     const [searchResults, setSearchResults] = useState<CompanyData[] | null>(null);
-    
+    const [minDur, setMinDur] = useState(0);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     // Новое состояние для автобусов
     const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
     const [companyBuses, setCompanyBuses] = useState<Bus[]>([]);
@@ -182,6 +200,33 @@ const DataBaseCompany: React.FC = () => {
                 company={companies} 
                 onSearchResults={(results) => setSearchResults(results)} 
             />
+
+
+                <Box sx={{ float: 'right' }}>
+                    <Button 
+                        onClick={handleOpen}
+                        variant="contained"
+                    >
+                        Отчет по компаниям
+                    </Button>
+                </Box>
+
+                <Modal open={open} onClose={handleClose}>
+                    <Box sx={style}>
+                        <h1>Компании по минимальному стажу работы</h1>
+                        <Button variant="contained" onClick={handleClose} sx={{ marginTop: 2, float: 'right' }}>
+                            Закрыть
+                        </Button>
+                        <TextField
+                            label="Минимальны стаж компании"
+                            value={minDur}
+                            type="number"
+                            onChange={(e) => setMinDur(Number(e.target.value))}
+                            required
+                        />
+                        <CompanyReport min_dur={minDur}/>
+                    </Box>
+                </Modal>
 
             {searchResults && searchResults.length > 0 && (
                 <Box sx={{ marginTop: 2 }}>

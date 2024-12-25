@@ -7,6 +7,10 @@ export interface CompanyData {
     number_phone: string;
 }
 
+interface min_dur {
+    minDur: number;
+}
+
 // get
 export const getCompanies = async (): Promise<CompanyData[]> => {
     try {
@@ -14,6 +18,17 @@ export const getCompanies = async (): Promise<CompanyData[]> => {
         return response.data;
     } catch (error) {
         console.error("Ошибка при получении данных о компаниях:", error);
+        throw error;
+    }
+};
+
+// GET: Получение отчета по компаниям с минимальным стажем работы
+export const getCompanyWithDurationWork = async (data: number): Promise<CompanyData[]> => {
+    try {
+        const response = await apiClient.get<CompanyData[]>(`/api/company/company/with_duration_work/${data}`);
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при получении отчета о компаниях с минимальным стажем работы:', error);
         throw error;
     }
 };

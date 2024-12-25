@@ -6,6 +6,7 @@ const BusReport: React.FC = () => {
     const [reportData, setReportData] = useState<BusData[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
+
     // Обработчик для загрузки отчета
     const handleGenerateReport = async () => {
         setLoading(true);
